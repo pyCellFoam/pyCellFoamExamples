@@ -71,6 +71,7 @@ from tools import colorConsole as cc
 from tools import placeFigures as pf
 from tools.tikZPicture import TikZPicture3D
  
+from tools.exportLaTeX import array2bmatrix
 
 
 
@@ -119,7 +120,14 @@ if __name__ == '__main__':
         pc = PrimalComplex3D(nodes,edges,faces,volumes)
         dc = DualComplex3D(pc)
             
-        
+        print('\\begin{align}')
+        print('\t\\incp{1} &= ')
+        print(array2bmatrix(pc.incidenceMatrix1,2),'&')
+        print('\t\\incp{2} &= ')
+        print(array2bmatrix(pc.incidenceMatrix2,2),'&')
+        print('\t\\incp{3} &= ')
+        print(array2bmatrix(pc.incidenceMatrix3,2))
+        print('\\end{align}')
         
 
 #-------------------------------------------------------------------------
@@ -140,10 +148,23 @@ if __name__ == '__main__':
         elif plottingMethod == 'pyplot':
             cc.printBlue('Plot using pyplot')
             (figs,axes) = pf.getFigures()
-            for f in faces:
-                f.plotFace(axes[0])
+            for n in nodes:
+                n.plotNode(axes[0])
                 
+                
+            for e in edges:
+                e.plotEdge(axes[0])
+                e.plotEdge(axes[1])
+            
+            for f in faces:
+                f.plotFace(axes[1])
+                f.plotFace(axes[2])
+                
+            for v in volumes:
+                v.plotVolume(axes[2])
             # dn0.plotNode(axes[0])
+            
+            
 
 #    VTK
 #--------------------------------------------------------------------- 
@@ -155,91 +176,119 @@ if __name__ == '__main__':
 #    TikZ
 #--------------------------------------------------------------------- 
         elif plottingMethod == 'TikZ' :
-            cc.printBlue('Plot using TikZ')            
+            cc.printBlue('Plot using TikZ')     
             
-            pic1 = TikZPicture3D()
+            if False:
             
-            for n in nodes:
-                n.plotNodeTikZ(pic1)
-            pic1.addTikZCoSy3D(n0.getTikZNode(pic1))
+                pic1 = TikZPicture3D()
                 
-            # pic1.writeLaTeXFile('latex','nodes_Full',compileFile=True,openFile=True)
-            pic1.writeTikZFile('latex','0_nodes')
-            
-            pic2 = TikZPicture3D()
-            
-            for n in nodes:
-                n.showLabel = False
-                n.plotNodeTikZ(pic2)
-            
-            for e in edges:
-                e.plotEdgeTikZ(pic2)
+                for n in nodes:
+                    n.plotNodeTikZ(pic1)
+                pic1.addTikZCoSy3D(n0.getTikZNode(pic1))
+                    
+                # pic1.writeLaTeXFile('latex','nodes_Full',compileFile=True,openFile=True)
+                pic1.writeTikZFile('latex','0_nodes')
                 
-            # pic2.writeLaTeXFile('latex','edges_Full',compileFile=True,openFile=True)
-            pic2.writeTikZFile('latex','1_edges')
-            
-            
-            pic3 = TikZPicture3D()
-            for n in nodes:
-                n.plotNodeTikZ(pic3)
-            for e in edges:
-                e.showLabel=False
-                e.showArrow=False
-                e.plotEdgeTikZ(pic3)
-            for f in faces:
-                f.plotFaceTikZ(pic3)
+                pic2 = TikZPicture3D()
                 
-            # pic3.writeLaTeXFile('latex','faces_Full',compileFile=True,openFile=True)
-            pic3.writeTikZFile('latex','2_faces')
-            
-            
-            pic4 = TikZPicture3D()
-            v0.plotVolumeTikZ(pic4)
-            # pic4.writeLaTeXFile('latex','volume_Full',compileFile=True,openFile=True)
-            pic4.writeTikZFile('latex','3_volume')          
-            
-            
-            pic5 = TikZPicture3D()
-            v0.showLabel=False
-            v0.showArrow = False
-            v0.showNormalVec=False
-            v0.showBarycenter=False
-            v0.plotVolumeTikZ(pic5)
-            for n in dc.innerNodes:
-                n.plotNodeTikZ(pic5)
-            # pic5.writeLaTeXFile('latex','dualNodes_Full',compileFile=True,openFile=True)
-            pic5.writeTikZFile('latex','0_dualNode')  
-            
-            
-            pic6 = TikZPicture3D()
-            for f in faces:
-                f.showLabel=False
-                f.plotFaceTikZ(pic6,showArrow=False)
-            for n in dc.innerNodes:
-                n.showLabel=False
-                n.plotNodeTikZ(pic6)
-            dc.borderEdges[0].plotEdgeTikZ(pic6)
-            # pic6.writeLaTeXFile('latex','dualEdges_Full',compileFile=True,openFile=True)
-            pic6.writeTikZFile('latex','1_dualEdge')   
-            
-            
-            pic7 = TikZPicture3D()
-            for e in edges:
-                e.plotEdgeTikZ(pic7)
+                for n in nodes:
+                    n.showLabel = False
+                    n.plotNodeTikZ(pic2)
                 
-            dc.borderFaces[0].plotFaceTikZ(pic7,showArrow=False)
+                for e in edges:
+                    e.plotEdgeTikZ(pic2)
+                    
+                # pic2.writeLaTeXFile('latex','edges_Full',compileFile=True,openFile=True)
+                pic2.writeTikZFile('latex','1_edges')
                 
-            # pic7.writeLaTeXFile('latex','dualFaces_Full',compileFile=True,openFile=True)
-            pic7.writeTikZFile('latex','2_dualFace')  
-
-            pic8 = TikZPicture3D()
-            for n in nodes:
-                n.plotNodeTikZ(pic8)
-            dc.volumes[0].plotVolumeTikZ(pic8,showArrow=False)      
-            pic8.writeLaTeXFile('latex','dualVolumes_Full',compileFile=True,openFile=True)
-            pic8.writeTikZFile('latex','3_dualVolume') 
+                
+                pic3 = TikZPicture3D()
+                for n in nodes:
+                    n.plotNodeTikZ(pic3)
+                for e in edges:
+                    e.showLabel=False
+                    e.showArrow=False
+                    e.plotEdgeTikZ(pic3)
+                for f in faces:
+                    f.plotFaceTikZ(pic3)
+                    
+                # pic3.writeLaTeXFile('latex','faces_Full',compileFile=True,openFile=True)
+                pic3.writeTikZFile('latex','2_faces')
+                
+                
+                pic4 = TikZPicture3D()
+                v0.plotVolumeTikZ(pic4)
+                # pic4.writeLaTeXFile('latex','volume_Full',compileFile=True,openFile=True)
+                pic4.writeTikZFile('latex','3_volume')          
+                
+                
+                pic5 = TikZPicture3D()
+                v0.showLabel=False
+                v0.showArrow = False
+                v0.showNormalVec=False
+                v0.showBarycenter=False
+                v0.plotVolumeTikZ(pic5)
+                for n in dc.innerNodes:
+                    n.plotNodeTikZ(pic5)
+                # pic5.writeLaTeXFile('latex','dualNodes_Full',compileFile=True,openFile=True)
+                pic5.writeTikZFile('latex','0_dualNode')  
+                
+                
+                pic6 = TikZPicture3D()
+                for f in faces:
+                    f.showLabel=False
+                    f.plotFaceTikZ(pic6,showArrow=False)
+                for n in dc.innerNodes:
+                    n.showLabel=False
+                    n.plotNodeTikZ(pic6)
+                dc.borderEdges[0].plotEdgeTikZ(pic6)
+                # pic6.writeLaTeXFile('latex','dualEdges_Full',compileFile=True,openFile=True)
+                pic6.writeTikZFile('latex','1_dualEdge')   
+                
+                
+                pic7 = TikZPicture3D()
+                for e in edges:
+                    e.plotEdgeTikZ(pic7)
+                    
+                dc.borderFaces[0].plotFaceTikZ(pic7,showArrow=False)
+                    
+                # pic7.writeLaTeXFile('latex','dualFaces_Full',compileFile=True,openFile=True)
+                pic7.writeTikZFile('latex','2_dualFace')  
+    
+                pic8 = TikZPicture3D()
+                for n in nodes:
+                    n.plotNodeTikZ(pic8)
+                dc.volumes[0].plotVolumeTikZ(pic8,showArrow=False)      
+                pic8.writeLaTeXFile('latex','dualVolumes_Full',compileFile=True,openFile=True)
+                pic8.writeTikZFile('latex','3_dualVolume') 
+                
             
             
+            if True:
+                picIncidence1 = TikZPicture3D()
+                for n in nodes:
+                    n.plotNodeTikZ(picIncidence1)
+                for e in edges:
+                    e.plotEdgeTikZ(picIncidence1)
+                # picIncidence1.writeLaTeXFile('latex','incidence1_Full',compileFile=True,openFile=True)
+                picIncidence1.writeTikZFile('latex','incidence1')
+                
+                picIncidence2 = TikZPicture3D()
+                for e in edges:
+                    e.plotEdgeTikZ(picIncidence2)
+                for f in faces:
+                    f.plotFaceTikZ(picIncidence2)
+                # picIncidence2.writeLaTeXFile('latex','incidence2_Full',compileFile=True,openFile=True)
+                picIncidence2.writeTikZFile('latex','incidence2')
+                
+                picIncidence3 = TikZPicture3D()
+                for f in faces:
+                    f.plotFaceTikZ(picIncidence3)
+                for v in volumes:
+                    v.plotVolumeTikZ(picIncidence3)
+                # picIncidence3.writeLaTeXFile('latex','incidence3_Full',compileFile=True,openFile=True)
+                picIncidence3.writeTikZFile('latex','incidence3')
+                
             
             
             
