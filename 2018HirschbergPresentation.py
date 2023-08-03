@@ -20,8 +20,7 @@
 #    Change to Main Directory
 #-------------------------------------------------------------------------
 import os
-if __name__ == '__main__':
-    os.chdir('../')
+
 
 
 #-------------------------------------------------------------------------
@@ -67,7 +66,7 @@ def doPlots(exportPath,doPlots1=False,doPlots2=False,doPlots3=False,doExports=Tr
     
     
     if not os.path.isdir(exportPath):
-        os.mkdir(exportPath)
+        os.makedirs(exportPath, exist_ok=True)
     
     
     axNum = -1
