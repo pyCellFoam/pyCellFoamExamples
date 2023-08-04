@@ -950,8 +950,8 @@ def doPlots(exportPath,doPlots1=False,doPlots2=False,doPlots3=False,doExports=Tr
 if __name__ == '__main__':
     with MyLogging ('pic4Hirschberg'):
         exportPath = ('graphicExport/Hirschberg2018/')
-        doPlots(exportPath,doPlots1=True)       
-        doPlots(exportPath,doPlots2=True)       
+        # doPlots(exportPath,doPlots1=True)       
+        # doPlots(exportPath,doPlots2=True)       
         doPlots(exportPath,doPlots3=True)         
     
         
