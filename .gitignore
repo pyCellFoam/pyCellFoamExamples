@@ -1,0 +1,5 @@
+*.png
+log/
+latex/
+export/
+.ipynb_checkpoints/
