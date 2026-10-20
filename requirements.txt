@@ -1,0 +1,5 @@
+pyCellFoamCore @ git+https://github.com/pyCellFoam/pyCellFoamCore@main
+numpy
+plotly
+vtk
+scipy
